@@ -60,6 +60,8 @@
 	href="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.skinNice.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -80,14 +82,15 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 			<h1>
-				订单管理 <small>全部订单</small>
+				产品管理 <small>全部产品</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
 				<li><a
-					href="${pageContext.request.contextPath}/pages/order-list.jsp">订单管理</a></li>
-				<li class="active">全部订单</li>
+					href="${pageContext.request.contextPath}/pages/product-list.jsp">产品管理</a></li>
+
+				<li class="active">全部产品</li>
 			</ol>
 			</section>
 			<!-- 内容头部 /-->
@@ -109,11 +112,11 @@
 							<div class="form-group form-inline">
 								<div class="btn-group">
 									<button type="button" class="btn btn-default" title="新建"
-										onclick='location.href="${pageContext.request.contextPath}/order/addUI"'>
+										onclick='location.href="${pageContext.request.contextPath}/pages/product-add.jsp"'>
 										<i class="fa fa-file-o"></i> 新建
 									</button>
 									<button type="button" class="btn btn-default" title="删除"
-										onclick='confirm("你确认要删除吗？")'>
+										onclick='delMany()'>
 										<i class="fa fa-trash-o"></i> 删除
 									</button>
 									<button type="button" class="btn btn-default" title="开启"
@@ -141,6 +144,7 @@
 						<!--工具栏/-->
 
 						<!--数据列表-->
+						<form id="formSubmit" action="${pageContext.request.contextPath}/product/delMany" method="post">
 						<table id="dataList"
 							class="table table-bordered table-striped table-hover dataTable">
 							<thead>
@@ -150,42 +154,45 @@
 									</th>
 									<th class="sorting_asc">ID</th>
 
-									<th class="sorting">订单编号</th>
-									<th class="sorting">下单时间</th>
-									<th class="sorting">出行人数</th>
-									<th class="sorting">支付方式</th>
-									<th class="sorting">订单状态</th>
+									<th class="sorting">产品编号</th>
 									<th class="sorting">产品名称</th>
+									<th class="sorting">出发城市</th>
+									<th class="sorting">出发日期</th>
+									<th class="sorting">产品价格</th>
+									<th class="sorting">产品状态</th>
 
 									<th class="text-center">操作</th>
 								</tr>
 							</thead>
 							<tbody>
+								<c:forEach items="${pageInfo.list}" var="product">
+								<tr>
+									<td><input name="ids" type="checkbox" value="${product.id}"></td>
+									<td>${product.id}</td>
 
-								<c:forEach items="${orderList}" var="order">
-									<tr>
-										<td><input name="ids" type="checkbox"></td>
-										<td>${order.id}</td>
+									<td>${product.productNum}</td>
+									<td>${product.productName}</td>
+									<td>${product.cityName}</td>
+									<td>
+										<fmt:formatDate value="${product.departureTime}" pattern="yyyy-MM-dd HH:mm"></fmt:formatDate>
+									</td>
+									<td>${product.productPrice}</td>
+									<td>${product.productStatus ==1 ? "开启":"关闭"}</td>
 
-										<td>${order.orderNum}</td>
-										<td><fmt:formatDate value="${order.orderTime}" pattern="yyyy-MM-dd HH:mm"></fmt:formatDate> </td>
-										<td>${order.peopleCount}</td>
-										<td>${order.payType==0?"支付宝":order.payType==1?"微信":"其他"}</td>
-										<td>${order.orderStatus==0?"未支付":"已支付"}</td>
-										<td>${order.product.productName}</td>
-
-										<td class="text-center">
-											<button type="button" class="btn bg-olive btn-xs"
-												onclick='location.href="${pageContext.request.contextPath}/pages/order-show.jsp"'>订单</button>
-											<button type="button" class="btn bg-olive btn-xs"
-												onclick='location.href="${pageContext.request.contextPath}/pages/order-show.jsp"'>查看</button>
-										</td>
-									</tr>
+									<td class="text-center">
+										<button type="button" class="btn bg-olive btn-xs"
+											onclick='location.href="all-order-manage-edit.html"'>订单</button>
+										<button type="button" class="btn bg-olive btn-xs"
+											onclick='location.href="${pageContext.request.contextPath}/product/updateUI?id=${product.id}"'>修改</button>
+										<button type="button" class="btn bg-olive btn-xs"
+												onclick='deleteOne(${product.id})'>删除</button>
+									</td>
+								</tr>
 								</c:forEach>
-
 							</tbody>
 
 						</table>
+						</form>
 						<!--数据列表/-->
 
 						<!--工具栏-->
@@ -197,7 +204,7 @@
 										<i class="fa fa-file-o"></i> 新建
 									</button>
 									<button type="button" class="btn btn-default" title="删除"
-										onclick='confirm("你确认要删除吗？")'>
+										onclick='delMany()'>
 										<i class="fa fa-trash-o"></i> 删除
 									</button>
 									<button type="button" class="btn btn-default" title="开启"
@@ -224,6 +231,7 @@
 						</div>
 						<!--工具栏/-->
 
+
 					</div>
 					<!-- 数据表格 /-->
 
@@ -234,27 +242,26 @@
 				<div class="box-footer">
 					<div class="pull-left">
 						<div class="form-group form-inline">
-							总共2 页，共14 条数据。 每页 <select class="form-control">
-								<option>10</option>
-								<option>15</option>
-								<option>20</option>
-								<option>50</option>
-								<option>80</option>
+							总共${pageInfo.pages} 页，共${pageInfo.total} 条数据。 每页
+							<select id="pageSize" onchange="gotoPage(1)" class="form-control">
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="5" selected = "selected">5</option>
+								<option value="6">6</option>
+								<option value="8">8</option>
 							</select> 条
 						</div>
 					</div>
 
 					<div class="box-tools pull-right">
 						<ul class="pagination">
-							<li><a href="#" aria-label="Previous">首页</a></li>
-							<li><a href="#">上一页</a></li>
-							<li><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li><a href="#" aria-label="Next">尾页</a></li>
+							<li><a href="javascript:gotoPage(1)" aria-label="Previous">首页</a></li>
+							<li><a href="javascript:gotoPage(${pageInfo.prePage})">上一页</a></li>
+							<c:forEach begin="${pageInfo.navigateFirstPage}" end="${pageInfo.navigateLastPage}" var="i">
+								<li><a href="javascript:gotoPage(${i})">${i}</a></li>
+							</c:forEach>
+							<li><a href="javascript:gotoPage(${pageInfo.nextPage})">下一页</a></li>
+							<li><a href="javascript:gotoPage(${pageInfo.pages})" aria-label="Next">尾页</a></li>
 						</ul>
 					</div>
 
@@ -281,10 +288,40 @@
 
 	</div>
 
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
+	<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+	<script type="text/javascript">
+		//删除单个产品
+		function deleteOne(id) {
+			if(confirm("确定要删除吗?")){
+			    location.href="${pageContext.request.contextPath}/product/deleteOne?id="+id;
+			}
+        }
+
+        function delMany() {
+		    if(confirm("确定要删除吗?")){
+                $('#formSubmit').submit();
+			}
+
+        }
+		$("#pageSize option[value=${pageInfo.pageSize}]").prop("selected","selected");
+
+        function gotoPage(currPage) {
+			var pageSize = $('#pageSize').val();
+		    if(currPage<1){
+		        return;
+			}
+			if(currPage>${pageInfo.total}){
+		        return;
+			}
+		    location.href="${pageContext.request.contextPath}/product/findAll?currPage="+currPage+"&pageSize="+pageSize;
+        }
+
+
+	</script>
+
+
+	<script src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
 	<script>
 		$.widget.bridge('uibutton', $.ui.button);
 	</script>
@@ -364,6 +401,9 @@
 		src="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.min.js"></script>
+
 	<script>
 		$(document).ready(function() {
 			// 选择框

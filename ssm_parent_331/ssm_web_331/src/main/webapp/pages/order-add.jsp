@@ -90,7 +90,7 @@
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a href="${pageContext.request.contextPath}/order/findAll.do">订单管理</a></li>
+				<li><a href="${pageContext.request.contextPath}/order/findAll">订单管理</a></li>
 				<li class="active">订单编辑</li>
 			</ol>
 			</section>
@@ -150,7 +150,7 @@
 							<select class="form-control select2" style="width: 100%"
 								name="product.id">
 								
-								<c:forEach items="${ plist }" var="p">
+								<c:forEach items="${ productList }" var="p">
 									<option value="${ p.id }" >${ p.productName }</option>
 								</c:forEach>
 								

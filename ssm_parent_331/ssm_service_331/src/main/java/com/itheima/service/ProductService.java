@@ -1,6 +1,8 @@
 package com.itheima.service;
 
 
+import com.github.pagehelper.PageInfo;
+import com.itheima.domain.PageBean;
 import com.itheima.domain.Product;
 
 import java.util.List;
@@ -14,5 +16,18 @@ public interface ProductService {
 
     public Product findById(Integer id);
 
-    void update(Product product);
+    public void update(Product product);
+
+    public void deleteOne(Integer id);
+
+    public void delMany(Integer[] ids);
+
+    public PageBean<Product> findByPage(Integer currPage, Integer pageSize);
+
+    public PageInfo<Product> findByPageHelper(Integer currPage, Integer pageSize);
+
+    /**
+     * 测试分页助手
+     */
+    public void testFindByPageHelper(Integer currPage, Integer pageSize);
 }

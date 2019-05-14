@@ -24,4 +24,11 @@ public class ProductTest {
 
     }
 
+
+    @Test
+    public void test2(){
+
+        productService.testFindByPageHelper(2,5);
+    }
+
 }

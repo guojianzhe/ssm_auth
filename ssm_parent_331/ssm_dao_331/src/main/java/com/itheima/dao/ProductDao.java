@@ -24,5 +24,25 @@ public interface ProductDao {
     public Product findById(Integer id);
 
     @Select("update product set productNum=#{productNum},productName=#{productName},cityName=#{cityName},departureTime=#{departureTime},productPrice=#{productPrice},productDesc=#{productDesc},productStatus=#{productStatus} where id=#{id}")
-    void update(Product product);
+    public void update(Product product);
+
+
+    @Select("delete from product where id=#{id}")
+    public void deleteOne(Integer id);
+
+    /**
+     * count(*)效率最低
+     * @return
+     */
+    @Select("select count(1) from product")
+    public Long findTotalCount();
+
+    /**
+     * 分页查询数据
+     * @param startIndex
+     * @param endIndex
+     * @return
+     */
+    @Select("select t.* from (select p.*,rownum rn from product p) t where t.rn BETWEEN #{param1} and #{param2}")
+    List<Product> findByPage(Integer startIndex, Integer endIndex);
 }

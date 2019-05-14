@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security.xsd">
+
+    <!--
+        配置拦截的规则
+        auto-config="使用自带的页面"
+        use-expressions="是否使用spel表达式"，如果使用表达式：hasRole('ROLE_USER')
+    -->
+    <security:http auto-config="true" use-expressions="false">
+        <!-- 配置拦截的请求地址，任何请求地址都必须有ROLE_USER的权限 -->
+        <security:intercept-url pattern="/**" access="ROLE_USER"/>
+        <!--指定安全框架使用的页面-->
+        <!--login-page:指定登录的页面
+            login-processing-url:登录请求路径-登录时必须使用该路径
+            default-target-url:登录成功后进入的页面
+            authentication-failure-forward-url:认证失败之后要进入的页面
+
+
+        -->
+        <security:form-login
+                login-page="/login.jsp"
+                             login-processing-url="/login"
+                             default-target-url="/index.jsp"
+                             authentication-failure-forward-url="/login.jsp"
+        ></security:form-login>
+
+        <!--关闭跨站伪造-->
+        <security:csrf disabled="true"></security:csrf>
+
+        <!--退出-->
+        <security:logout invalidate-session="true" logout-url="/logout" logout-success-url=""></security:logout>
+
+    </security:http>
+    <!-- 配置认证信息 -->
+    <security:authentication-manager>
+        <security:authentication-provider>
+            <security:user-service>
+                <security:user name="admin" password="{noop}admin" authorities="ROLE_USER"/>
+            </security:user-service>
+        </security:authentication-provider>
+    </security:authentication-manager>
+</beans>

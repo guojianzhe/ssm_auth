@@ -116,7 +116,7 @@
 										<i class="fa fa-file-o"></i> 新建
 									</button>
 									<button type="button" class="btn btn-default" title="删除"
-										onclick='confirm("你确认要删除吗？")'>
+										onclick='delMany()'>
 										<i class="fa fa-trash-o"></i> 删除
 									</button>
 									<button type="button" class="btn btn-default" title="开启"
@@ -144,6 +144,7 @@
 						<!--工具栏/-->
 
 						<!--数据列表-->
+						<form id="formSubmit" action="${pageContext.request.contextPath}/product/delMany" method="post">
 						<table id="dataList"
 							class="table table-bordered table-striped table-hover dataTable">
 							<thead>
@@ -164,9 +165,9 @@
 								</tr>
 							</thead>
 							<tbody>
-								<c:forEach items="${productList}" var="product">
+								<c:forEach items="${pageBean.list}" var="product">
 								<tr>
-									<td><input name="ids" type="checkbox"></td>
+									<td><input name="ids" type="checkbox" value="${product.id}"></td>
 									<td>${product.id}</td>
 
 									<td>${product.productNum}</td>
@@ -183,12 +184,15 @@
 											onclick='location.href="all-order-manage-edit.html"'>订单</button>
 										<button type="button" class="btn bg-olive btn-xs"
 											onclick='location.href="${pageContext.request.contextPath}/product/updateUI?id=${product.id}"'>修改</button>
+										<button type="button" class="btn bg-olive btn-xs"
+												onclick='deleteOne(${product.id})'>删除</button>
 									</td>
 								</tr>
 								</c:forEach>
 							</tbody>
 
 						</table>
+						</form>
 						<!--数据列表/-->
 
 						<!--工具栏-->
@@ -200,7 +204,7 @@
 										<i class="fa fa-file-o"></i> 新建
 									</button>
 									<button type="button" class="btn btn-default" title="删除"
-										onclick='confirm("你确认要删除吗？")'>
+										onclick='delMany()'>
 										<i class="fa fa-trash-o"></i> 删除
 									</button>
 									<button type="button" class="btn btn-default" title="开启"
@@ -238,27 +242,26 @@
 				<div class="box-footer">
 					<div class="pull-left">
 						<div class="form-group form-inline">
-							总共2 页，共14 条数据。 每页 <select class="form-control">
-								<option>10</option>
-								<option>15</option>
-								<option>20</option>
-								<option>50</option>
-								<option>80</option>
+							总共${pageBean.totalPage} 页，共${pageBean.totalCount} 条数据。 每页
+							<select id="pageSize" onchange="gotoPage(1)" class="form-control">
+								<option value="2">2</option>
+								<option value="3">3</option>
+								<option value="5" selected = "selected">5</option>
+								<option value="6">6</option>
+								<option value="8">8</option>
 							</select> 条
 						</div>
 					</div>
 
 					<div class="box-tools pull-right">
 						<ul class="pagination">
-							<li><a href="#" aria-label="Previous">首页</a></li>
-							<li><a href="#">上一页</a></li>
-							<li><a href="#">1</a></li>
-							<li><a href="#">2</a></li>
-							<li><a href="#">3</a></li>
-							<li><a href="#">4</a></li>
-							<li><a href="#">5</a></li>
-							<li><a href="#">下一页</a></li>
-							<li><a href="#" aria-label="Next">尾页</a></li>
+							<li><a href="javascript:gotoPage(1)" aria-label="Previous">首页</a></li>
+							<li><a href="javascript:gotoPage(${pageBean.currPage-1})">上一页</a></li>
+							<c:forEach begin="1" end="${pageBean.totalPage}" var="i">
+								<li><a href="javascript:gotoPage(${i})">${i}</a></li>
+							</c:forEach>
+							<li><a href="javascript:gotoPage(${pageBean.currPage+1})">下一页</a></li>
+							<li><a href="javascript:gotoPage(${pageBean.totalPage})" aria-label="Next">尾页</a></li>
 						</ul>
 					</div>
 
@@ -285,10 +288,40 @@
 
 	</div>
 
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
+	<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+	<script type="text/javascript">
+		//删除单个产品
+		function deleteOne(id) {
+			if(confirm("确定要删除吗?")){
+			    location.href="${pageContext.request.contextPath}/product/deleteOne?id="+id;
+			}
+        }
+
+        function delMany() {
+		    if(confirm("确定要删除吗?")){
+                $('#formSubmit').submit();
+			}
+
+        }
+		$("#pageSize option[value=${pageBean.pageSize}]").prop("selected","selected");
+
+        function gotoPage(currPage) {
+			var pageSize = $('#pageSize').val();
+		    if(currPage<1){
+		        return;
+			}
+			if(currPage>${pageBean.totalPage}){
+		        return;
+			}
+		    location.href="${pageContext.request.contextPath}/product/findAll?currPage="+currPage+"&pageSize="+pageSize;
+        }
+
+
+	</script>
+
+
+	<script src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
 	<script>
 		$.widget.bridge('uibutton', $.ui.button);
 	</script>
