@@ -18,4 +18,11 @@ public interface ProductDao {
     @Insert("insert into product values (#{id},#{productNum},#{productName},#{cityName},#{departureTime},#{productPrice},#{productDesc},#{productStatus})")
     @SelectKey(keyProperty = "id",keyColumn = "id",before = true,resultType = Integer.class,statement = "select product_seq.nextval from dual")
     public void save(Product product);
+
+
+    @Select("select * from product where id = #{id}")
+    public Product findById(Integer id);
+
+    @Select("update product set productNum=#{productNum},productName=#{productName},cityName=#{cityName},departureTime=#{departureTime},productPrice=#{productPrice},productDesc=#{productDesc},productStatus=#{productStatus} where id=#{id}")
+    void update(Product product);
 }

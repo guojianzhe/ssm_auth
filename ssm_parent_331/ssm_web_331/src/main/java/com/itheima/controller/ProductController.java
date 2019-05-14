@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.jws.WebParam;
 import java.util.List;
 
 @Controller
@@ -35,6 +36,11 @@ public class ProductController {
         return modelAndView;
     }
 
+    /**
+     * 产品保存页面
+     * @param product
+     * @return
+     */
     @RequestMapping("/save")
     public String save(Product product){
 
@@ -42,5 +48,33 @@ public class ProductController {
 
         return "redirect:/product/findAll";
     }
+
+    @RequestMapping("/updateUI")
+    public ModelAndView updateUI(Integer id){
+
+
+        Product product = productService.findById(id);
+
+
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.addObject("product",product);
+
+        modelAndView.setViewName("product-update");
+
+
+        return modelAndView;
+    }
+
+    @RequestMapping("/update")
+    public String update(Product product){
+
+        productService.update(product);
+
+
+        return "redirect:/product/findAll";
+    }
+
+
 
 }

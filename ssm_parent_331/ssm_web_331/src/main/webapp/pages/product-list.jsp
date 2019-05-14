@@ -173,7 +173,7 @@
 									<td>${product.productName}</td>
 									<td>${product.cityName}</td>
 									<td>
-										<fmt:formatDate value="${product.departureTime}" pattern="yyyy-MM-dd"></fmt:formatDate>
+										<fmt:formatDate value="${product.departureTime}" pattern="yyyy-MM-dd HH:mm"></fmt:formatDate>
 									</td>
 									<td>${product.productPrice}</td>
 									<td>${product.productStatus ==1 ? "开启":"关闭"}</td>
@@ -182,7 +182,7 @@
 										<button type="button" class="btn bg-olive btn-xs"
 											onclick='location.href="all-order-manage-edit.html"'>订单</button>
 										<button type="button" class="btn bg-olive btn-xs"
-											onclick='location.href="${pageContext.request.contextPath}/product/updateUI"'>修改</button>
+											onclick='location.href="${pageContext.request.contextPath}/product/updateUI?id=${product.id}"'>修改</button>
 									</td>
 								</tr>
 								</c:forEach>
