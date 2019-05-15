@@ -1,5 +1,6 @@
 <%@ page language="java" isELIgnored="false" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -144,16 +145,16 @@
 								</thead>
 								<tbody>
 
-									<c:forEach items="${userlist}" var="user">
+									<c:forEach items="${userList}" var="user" varStatus="i">
 										<tr>
 											<td><input name="ids" type="checkbox"></td>
-											<td>${user.id }</td>
+											<td>${i.count}</td>
 											<td>${user.username }</td>
 											<td>${user.email }</td>
 											<td>${user.phoneNum }</td>
-											<td>${user.statusStr }</td>											
+											<td>${user.status==1?"开启":"关闭" }</td>
 											<td class="text-center">
-												<a href="${pageContext.request.contextPath}/pages/user-show.jsp" class="btn bg-olive btn-xs">详情</a>
+												<a href="${pageContext.request.contextPath}/user/details?userId=${user.id}" class="btn bg-olive btn-xs">详情</a>
 												<a href="${pageContext.request.contextPath}/pages/user-role-add.jsp" class="btn bg-olive btn-xs">添加角色</a>
 											</td>
 										</tr>

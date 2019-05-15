@@ -1,5 +1,8 @@
 package com.itheima.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SysUser {
 
     private Long id;
@@ -8,6 +11,17 @@ public class SysUser {
     private String password;
     private String phoneNum;
     private int status;
+
+    //一个用户对应多个角色
+    private List<Role> roleList = new ArrayList<>();
+
+    public List<Role> getRoleList() {
+        return roleList;
+    }
+
+    public void setRoleList(List<Role> roleList) {
+        this.roleList = roleList;
+    }
 
     public Long getId() {
         return id;
@@ -57,15 +71,7 @@ public class SysUser {
         this.status = status;
     }
 
-    @Override
-    public String toString() {
-        return "SysUser{" +
-                "id=" + id +
-                ", username='" + username + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", phoneNum='" + phoneNum + '\'' +
-                ", status=" + status +
-                '}';
-    }
+
+
+
 }

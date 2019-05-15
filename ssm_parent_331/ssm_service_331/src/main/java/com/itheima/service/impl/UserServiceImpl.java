@@ -9,13 +9,18 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service("userService")
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Autowired
     UserDao userDao;
@@ -39,12 +44,40 @@ public class UserServiceImpl implements UserService {
 
             authorities.add(simpleGrantedAuthority);
 
-            UserDetails user = new User(sysUser.getUsername(),"{noop}"+sysUser.getPassword(),authorities);
+            UserDetails user = new User(sysUser.getUsername(),sysUser.getPassword(),authorities);
             return user;
         }
 
 
 
         return null;
+    }
+
+    @Override
+    public List<SysUser> findAll() {
+        return userDao.findAll();
+    }
+
+    @Override
+    public void save(SysUser sysUser) {
+        String securityPassword = passwordEncoder.encode(sysUser.getPassword());
+
+        sysUser.setPassword(securityPassword);
+
+        userDao.save(sysUser);
+    }
+
+    @Override
+    public boolean isUniqueUsername(String username) {
+
+
+        SysUser sysUser = userDao.findAllUserByUsername(username);
+
+        return sysUser==null;
+    }
+
+    @Override
+    public SysUser findById(Integer userId) {
+        return userDao.findById(userId);
     }
 }

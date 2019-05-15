@@ -91,7 +91,7 @@
 			</section>
 			<!-- 内容头部 /-->
 
-			<form action="${pageContext.request.contextPath}/user/save.do"
+			<form action="${pageContext.request.contextPath}/user/save"
 				method="post">
 				<!-- 正文区域 -->
 				<section class="content"> <!--产品信息-->
@@ -102,7 +102,7 @@
 
 						<div class="col-md-2 title">用户名称</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="username"
+							<input type="text" class="form-control" id="username" name="username" onchange="isUniqeUsername()"
 								placeholder="用户名称" value="">
 						</div>
 						<div class="col-md-2 title">密码</div>
@@ -156,10 +156,23 @@
 	</div>
 
 
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
+	<script src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
+
+	<script type="text/javascript">
+
+		function isUniqeUsername() {
+			var username = $("#username").val();
+			$.post("${pageContext.request.contextPath}/user/isUniqueUsername",{"username":username},function (data) {
+				alert(data)
+            },"json")
+        }
+
+
+	</script>
+
+
+
+	<script src="${pageContext.request.contextPath}/plugins/jQueryUI/jquery-ui.min.js"></script>
 	<script>
 		$.widget.bridge('uibutton', $.ui.button);
 	</script>

@@ -1,5 +1,6 @@
 <%@ page language="java" isELIgnored="false" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -142,18 +143,18 @@
 								</tr>
 
 								<tbody>
-									<c:forEach items="${user.roles}" var="role">
+									<c:forEach items="${user.roleList}" var="role">
 										<tr data-tt-id="1" data-tt-parent-id="0">
 											<td>${role.roleName }</td>
 											<td>${role.roleDesc }</td>
 										</tr>
-										<c:forEach items="${role.permissions}" var="permission">
-											<tr data-tt-id="1-1" data-tt-parent-id="1">
-												<td>${permission.permissionName}</td>
-												<td>${permission.url}</td>
-											</tr>
+										<%--<c:forEach items="${role.permissionList}" var="permission">--%>
+											<%--<tr data-tt-id="1-1" data-tt-parent-id="1">--%>
+												<%--<td>${permission.permissionName}</td>--%>
+												<%--<td>${permission.url}</td>--%>
+											<%--</tr>--%>
 
-										</c:forEach>
+										<%--</c:forEach>--%>
 									</c:forEach>
 								</tbody>
 							</table>
