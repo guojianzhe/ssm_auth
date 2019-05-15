@@ -7,6 +7,13 @@
                            http://www.springframework.org/schema/security
                            http://www.springframework.org/schema/security/spring-security.xsd">
 
+
+    <security:http pattern="/login.jsp" security="none"></security:http>
+    <security:http pattern="/error.jsp" security="none"></security:http>
+    <security:http pattern="/favicon.ico" security="none"></security:http>
+    <security:http pattern="/css/**" security="none"/>
+    <security:http pattern="/img/**" security="none"/>
+    <security:http pattern="/plugins/**" security="none"/>
     <!--
         配置拦截的规则
         auto-config="使用自带的页面"
@@ -24,7 +31,7 @@
 
         -->
         <security:form-login
-                login-page="/login.jsp"
+                             login-page="/login.jsp"
                              login-processing-url="/login"
                              default-target-url="/index.jsp"
                              authentication-failure-forward-url="/login.jsp"
@@ -34,15 +41,16 @@
         <security:csrf disabled="true"></security:csrf>
 
         <!--退出-->
-        <security:logout invalidate-session="true" logout-url="/logout" logout-success-url=""></security:logout>
+        <security:logout invalidate-session="true" logout-url="/logout" logout-success-url="/login.jsp"/>
 
     </security:http>
     <!-- 配置认证信息 -->
     <security:authentication-manager>
-        <security:authentication-provider>
-            <security:user-service>
-                <security:user name="admin" password="{noop}admin" authorities="ROLE_USER"/>
-            </security:user-service>
+        <!--认证信息的提供者:关联用户服务对象-提供账号和密码-->
+        <security:authentication-provider user-service-ref="userService">
+<!--            <security:user-service>-->
+<!--                <security:user name="admin" password="{noop}admin" authorities="ROLE_USER"/>-->
+<!--            </security:user-service>-->
         </security:authentication-provider>
     </security:authentication-manager>
 </beans>
