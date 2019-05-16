@@ -71,7 +71,16 @@ public class SysUser {
         this.status = status;
     }
 
-
-
-
+    @Override
+    public String toString() {
+        return "SysUser{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", phoneNum='" + phoneNum + '\'' +
+                ", status=" + status +
+                ", roleList=" + roleList +
+                '}';
+    }
 }

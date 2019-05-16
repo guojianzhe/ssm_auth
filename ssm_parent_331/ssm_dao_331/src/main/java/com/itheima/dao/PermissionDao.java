@@ -17,7 +17,7 @@ public interface PermissionDao {
     @Insert("insert into sys_permission values (permission_seq.nextval,#{permissionName},#{url},#{pid})")
     public void save(Permission permission);
 
-    @Select("select * from sys_role_permission rp,SYS_PERMISSION p where rp.PERMISSIONID=p.ID and ROLEID=#{roleId}")
+    @Select("select p.* from sys_role_permission rp,SYS_PERMISSION p where rp.PERMISSIONID=p.ID and ROLEID=#{roleId}")
     public List<Permission> findPermissionListByRoleId(Integer roleId);
 
 }

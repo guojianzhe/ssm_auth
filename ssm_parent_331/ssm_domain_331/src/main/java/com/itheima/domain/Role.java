@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Role {
-    private Long id;
+    private Integer id;
     private String roleName;
     private String roleDesc;
 
@@ -30,11 +30,11 @@ public class Role {
         this.sysUserList = sysUserList;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -60,6 +60,8 @@ public class Role {
                 "id=" + id +
                 ", roleName='" + roleName + '\'' +
                 ", roleDesc='" + roleDesc + '\'' +
+                ", sysUserList=" + sysUserList +
+                ", permissionList=" + permissionList +
                 '}';
     }
 }

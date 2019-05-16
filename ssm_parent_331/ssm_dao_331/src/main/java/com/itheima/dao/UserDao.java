@@ -3,6 +3,8 @@ package com.itheima.dao;
 import com.itheima.domain.Role;
 import com.itheima.domain.SysUser;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.FetchType;
+import org.springframework.context.annotation.Lazy;
 
 import java.util.List;
 
@@ -33,12 +35,13 @@ public interface UserDao {
     public SysUser findAllUserByUsername(String username);
 
     @Select("select * from sys_user where id=#{userId}")
-    @Results(
+    @Results({
+            @Result(property = "id",column = "id"),
             @Result(property = "roleList",column = "id",javaType = List.class,
             //根据userId查询角色列表
                     //findRoleListByUserId
-            many = @Many(select = "com.itheima.dao.RoleDao.findRoleListByUserId"))
-
+                    //fetchType= FetchType.LAZY  延迟加载  当用的时候 使用上sql语句,不用的时候用不上sql语句
+            many = @Many(select = "com.itheima.dao.RoleDao.findRoleListByUserId",fetchType= FetchType.LAZY))}
     )
     public SysUser findById(Integer userId);
 }

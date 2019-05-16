@@ -52,4 +52,15 @@ public class Permission {
     public void setPid(Integer pid) {
         this.pid = pid;
     }
+
+    @Override
+    public String toString() {
+        return "Permission{" +
+                "id=" + id +
+                ", permissionName='" + permissionName + '\'' +
+                ", url='" + url + '\'' +
+                ", pid=" + pid +
+//                ", roleList=" + roleList +
+                '}';
+    }
 }
