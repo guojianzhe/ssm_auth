@@ -25,4 +25,24 @@ public class RoleServiceImpl implements RoleService {
         roleDao.save(role);
     }
 
+    @Override
+    public void addPermissionToRole(Integer roleId, Integer[] ids) {
+
+
+        //首先将用户所拥有的所有权限都删除
+        roleDao.delPermissionFromRole(roleId);
+
+        //首先判断ids是否为空
+        if(ids!=null){
+            for (Integer permissionId : ids) {
+                roleDao.savePermissionToRole(permissionId,roleId);
+            }
+
+
+        }
+
+
+
+    }
+
 }

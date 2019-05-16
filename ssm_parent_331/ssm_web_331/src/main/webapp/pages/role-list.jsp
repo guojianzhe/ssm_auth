@@ -143,14 +143,14 @@
 								</thead>
 								<tbody>
 
-									<c:forEach items="${roleList}" var="role">
+									<c:forEach items="${roleList}" var="role" varStatus="i">
 										<tr>
 											<td><input name="ids" type="checkbox"></td>
-											<td>${role.id }</td>
+											<td>${i.count}</td>
 											<td>${role.roleName }</td>
 											<td>${role.roleDesc }</td>																				
 											<td class="text-center">
-												<a href="${pageContext.request.contextPath}/pages/role-permission-add.jsp" class="btn bg-olive btn-xs">添加权限</a>
+												<a href="${pageContext.request.contextPath}/role/addPermissionToRoleUI?roleId=${role.id}" class="btn bg-olive btn-xs">添加权限</a>
 											</td>
 										</tr>
 									</c:forEach>

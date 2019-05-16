@@ -5,10 +5,8 @@ import com.itheima.domain.Role;
 import com.itheima.domain.SysUser;
 import com.itheima.service.RoleService;
 import com.itheima.service.UserService;
-import com.sun.org.apache.bcel.internal.generic.RETURN;
-import org.apache.ibatis.annotations.Result;
-import org.aspectj.apache.bcel.generic.RET;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,6 +17,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/user")
+@Secured("ROLE_ADMIN")
 public class UserController {
 
     @Resource
@@ -90,15 +89,33 @@ public class UserController {
             sb.append(role.getId());
             sb.append(",");
         }
-
+        System.out.println(sb.toString());
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.addObject("roleList",roleList);
         modelAndView.addObject("str",sb.toString());
+        modelAndView.addObject("userId",user.getId());
 
         modelAndView.setViewName("user-role-add");
 
         return modelAndView;
+    }
+
+    /**
+     * 给哪个用户添加角色
+     * @param ids
+     * @param userId
+     * @return
+     */
+    @RequestMapping("addRoleToUser")
+    public String addRoleToUser(Integer userId,Integer[] ids){
+
+        userService.addRoleToUser(userId,ids);
+
+
+
+
+        return "redirect:/user/findAll";
     }
 
 }

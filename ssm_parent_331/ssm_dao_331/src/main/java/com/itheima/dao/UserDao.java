@@ -15,6 +15,12 @@ public interface UserDao {
      * @return
      */
     @Select("select * from sys_user where username=#{username} and status=1")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "roleList",column = "id",javaType = List.class,
+            many = @Many(select = "com.itheima.dao.RoleDao.findRoleListByUserId",fetchType = FetchType.LAZY))}
+
+    )
     SysUser findByUsername(String username);
 
     /**
@@ -41,7 +47,14 @@ public interface UserDao {
             //根据userId查询角色列表
                     //findRoleListByUserId
                     //fetchType= FetchType.LAZY  延迟加载  当用的时候 使用上sql语句,不用的时候用不上sql语句
-            many = @Many(select = "com.itheima.dao.RoleDao.findRoleListByUserId",fetchType= FetchType.LAZY))}
+            many = @Many(select = "com.itheima.dao.RoleDao.findRoleListByUserId",fetchType = FetchType.LAZY))}
     )
     public SysUser findById(Integer userId);
+
+
+    @Delete("delete from sys_user_role where userId=#{userId}")
+    public void delRoleFromUser(Integer userId);
+
+    @Insert("insert into sys_user_role values (#{param1},#{param2})")
+    public void saveRoleToUser(Integer userId, Integer roleId);
 }

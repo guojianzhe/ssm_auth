@@ -12,4 +12,6 @@ public interface PermissionService {
     List<Permission> findAllParentPermission();
 
     void save(Permission permission);
+
+    List<Permission> findPermissionListByRoleId(Integer roleId);
 }

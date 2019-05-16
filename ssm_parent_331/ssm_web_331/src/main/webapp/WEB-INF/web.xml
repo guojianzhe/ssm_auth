@@ -41,6 +41,11 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+  <!--配置请求监听器,当请求发生时,在容器中创建请求对象-->
+  <listener>
+    <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+  </listener>
+  
   <!--前端控制器-->
   <servlet>
     <servlet-name>dispatcherServlet</servlet-name>

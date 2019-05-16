@@ -30,4 +30,10 @@ public class PermissionServiceImpl implements PermissionService {
 
         permissionDao.save(permission);
     }
+
+    @Override
+    public List<Permission> findPermissionListByRoleId(Integer roleId) {
+
+        return permissionDao.findPermissionListByRoleId(roleId);
+    }
 }

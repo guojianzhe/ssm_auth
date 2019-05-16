@@ -23,4 +23,10 @@ public interface RoleDao {
 
     )})
     public List<Role> findRoleListByUserId(Integer userId);
+
+    @Delete("delete from sys_role_permission where roleId=#{roleId}")
+    public void delPermissionFromRole(Integer roleId);
+
+    @Insert("insert into sys_role_permission values (#{param1},#{param2})")
+    public void savePermissionToRole(Integer permissionId, Integer roleId);
 }

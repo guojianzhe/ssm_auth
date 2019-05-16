@@ -18,4 +18,6 @@ public interface UserService extends UserDetailsService {
     public boolean isUniqueUsername(String username);
 
     public SysUser findById(Integer userId);
+
+    void addRoleToUser(Integer userId, Integer[] ids);
 }

@@ -1,6 +1,7 @@
 package com.itheima.service.impl;
 
 import com.itheima.dao.UserDao;
+import com.itheima.domain.Role;
 import com.itheima.domain.SysUser;
 import com.itheima.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +40,17 @@ public class UserServiceImpl implements UserService {
         if(sysUser!=null){
             //创建角色的集合对象
             Collection<GrantedAuthority> authorities = new ArrayList<>();
-            //创建临时的角色对象
-            GrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+//            //创建临时的角色对象
+//            GrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_USER");
+//
+//            authorities.add(simpleGrantedAuthority);
 
-            authorities.add(simpleGrantedAuthority);
+            //创建真正的角色对象
+            for (Role role : sysUser.getRoleList()) {
+                SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority("ROLE_" + role.getRoleName());
+                authorities.add(simpleGrantedAuthority);
+            }
+
 
             UserDetails user = new User(sysUser.getUsername(),sysUser.getPassword(),authorities);
             return user;
@@ -79,5 +87,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public SysUser findById(Integer userId) {
         return userDao.findById(userId);
+    }
+
+    @Override
+    public void addRoleToUser(Integer userId, Integer[] ids) {
+        //先清空该用户拥有的所有角色
+        userDao.delRoleFromUser(userId);
+
+
+        //判断ids是否为空
+        if(ids!=null){
+            for (Integer roleId : ids) {
+                userDao.saveRoleToUser(userId,roleId);
+            }
+        }
+
     }
 }
